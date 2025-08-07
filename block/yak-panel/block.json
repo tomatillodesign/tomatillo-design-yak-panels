@@ -26,5 +26,7 @@
       "default": 1
     }
   },
-  "editorScript": "yak-panel-editor"
+  "editorScript": "yak-panel-editor",
+  "editorStyle": "yak-panel-editor-style",
+  "style": "yak-panel-style"
 }

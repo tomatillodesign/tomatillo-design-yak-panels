@@ -26,22 +26,30 @@
 
 		edit: (props) => {
 			const { attributes: { columns }, setAttributes } = props;
-			const ref = useRef(null);
+			const containerRef = useRef(null);
 
 			useEffect(() => {
-				const gridEl = ref.current;
-				if (!gridEl || !window.GridStack) {
-					console.warn('⚠️ Gridstack container or GridStack lib missing.');
+				const container = containerRef.current;
+				if (!container || !window.GridStack) {
+					console.warn('⚠️ Yak Panels: No container or GridStack lib');
 					return;
 				}
 
-				// Clean up existing gridstack if any
+				// 🔍 Target the real gridstack zone — NOT the outer block wrapper
+				const gridEl = container.querySelector('.block-editor-block-list__layout.grid-stack');
+				if (!gridEl) {
+					console.warn('❌ Yak Panels: Could not find inner .grid-stack layout');
+					return;
+				}
+
+				console.log('⚙️ Yak Panels: Initializing GridStack with', columns, gridEl);
+
+				// 🔄 Destroy old GridStack instance if exists
 				if (gridEl.gridstack) {
 					gridEl.gridstack.destroy(false);
 					console.log('🧹 Gridstack destroyed before re-init');
 				}
 
-				// Initialize Gridstack
 				const grid = GridStack.init({
 					column: columns,
 					cellHeight: 150,
@@ -49,16 +57,40 @@
 					animate: true
 				}, gridEl);
 
-				console.log(`✅ Gridstack initialized with ${columns} columns`);
+				console.log('✅ Yak Panels: GridStack successfully initialized', grid);
+
+				grid.on('change', (event, items) => {
+					console.log('📦 Yak Panels: Grid change triggered:', items);
+
+					items.forEach(item => {
+						const el = item.el;
+						const blockId = el?.dataset?.block;
+						if (!blockId) {
+							console.warn('⚠️ Yak Panels: Missing data-block attribute on item:', el);
+							return;
+						}
+
+						const newAttrs = {
+							x: item.x,
+							y: item.y,
+							width: item.w,
+							height: item.h
+						};
+
+						console.log(`🔄 Yak Panels: Saving new grid data for ${blockId}`, newAttrs);
+
+						wp.data.dispatch('core/block-editor').updateBlockAttributes(blockId, newAttrs);
+					});
+				});
 
 				return () => {
 					grid.destroy(false);
-					console.log('🧼 Gridstack cleanup on unmount');
+					console.log('🧼 Yak Panels: Gridstack destroyed on unmount');
 				};
 			}, [columns]);
 
 			const blockProps = useBlockProps({
-				ref,
+				ref: containerRef,
 				className: 'yak-panels-block grid-stack',
 				'data-columns': columns
 			});
@@ -93,7 +125,7 @@
 			);
 		},
 
-		save: function (props) {
+		save: (props) => {
 			const { columns } = props.attributes;
 
 			return wp.element.createElement(
@@ -105,6 +137,5 @@
 				wp.element.createElement(wp.blockEditor.InnerBlocks.Content)
 			);
 		}
-
 	});
 })(window.wp);
