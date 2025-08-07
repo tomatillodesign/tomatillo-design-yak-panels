@@ -1,0 +1,30 @@
+{
+  "apiVersion": 2,
+  "name": "yak/panel",
+  "title": "Yak Panel",
+  "parent": [ "yak/panels" ],
+  "icon": "excerpt-view",
+  "category": "layout",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "x": {
+      "type": "number",
+      "default": 0
+    },
+    "y": {
+      "type": "number",
+      "default": 0
+    },
+    "width": {
+      "type": "number",
+      "default": 1
+    },
+    "height": {
+      "type": "number",
+      "default": 1
+    }
+  },
+  "editorScript": "yak-panel-editor"
+}

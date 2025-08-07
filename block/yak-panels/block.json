@@ -1,0 +1,45 @@
+{
+  "apiVersion": 2,
+  "name": "yak/panels",
+  "title": "Yak Panels",
+  "description": "A flexible, drag-and-drop layout powered by Gridstack.js and Yak Panel children.",
+  "category": "layout",
+  "icon": "grid-view",
+  "keywords": [ "grid", "layout", "panels", "drag", "drop" ],
+  "textdomain": "yak-panels",
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "align": [ "wide", "full" ]
+  },
+  "attributes": {
+    "columns": {
+      "type": "number",
+      "default": 4
+    }
+  },
+  "editorScript": "yak-panels-editor",
+  "editorStyle": "yak-panels-editor",
+  "style": "yak-panels-style",
+  "usesContext": [],
+  "providesContext": {
+    "yakPanels/columns": "columns"
+  },
+  "example": {
+    "attributes": {
+      "columns": 4
+    },
+    "innerBlocks": [
+      {
+        "name": "yak/panel",
+        "attributes": {},
+        "innerBlocks": []
+      },
+      {
+        "name": "yak/panel",
+        "attributes": {},
+        "innerBlocks": []
+      }
+    ]
+  }
+}
