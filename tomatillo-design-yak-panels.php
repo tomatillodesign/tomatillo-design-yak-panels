@@ -18,7 +18,7 @@ function yak_panels_register_block() {
 	$plugin_dir = __DIR__;
 	$plugin_url = plugin_dir_url( __FILE__ );
 
-	// Register styles
+	// === Register styles ===
 	wp_register_style(
 		'yak-panels-style',
 		$plugin_url . 'block/style.css',
@@ -33,7 +33,6 @@ function yak_panels_register_block() {
 		filemtime( $plugin_dir . '/block/editor.css' )
 	);
 
-	// Register Gridstack CSS
 	wp_register_style(
 		'gridstack-css',
 		'https://cdn.jsdelivr.net/npm/gridstack@12.2.2/dist/gridstack.min.css',
@@ -41,7 +40,7 @@ function yak_panels_register_block() {
 		'12.2.2'
 	);
 
-	// Register scripts
+	// === Register scripts ===
 	wp_register_script(
 		'gridstack-lib',
 		'https://cdn.jsdelivr.net/npm/gridstack@12.2.2/dist/gridstack-all.min.js',
@@ -58,17 +57,33 @@ function yak_panels_register_block() {
 		true
 	);
 
-	// Register block with block.json
+	wp_register_script(
+		'yak-panels-enhancements',
+		$plugin_url . 'block/block-enhancements.js',
+		[ 'wp-dom-ready' ],
+		filemtime( $plugin_dir . '/block/block-enhancements.js' ),
+		true
+	);
+
+	// === Register block ===
 	register_block_type( $plugin_dir . '/block' );
 }
 add_action( 'init', 'yak_panels_register_block' );
 
 /**
- * Frontend-only script loader
+ * Enqueue editor-only assets
+ */
+add_action( 'enqueue_block_editor_assets', function() {
+	wp_enqueue_script( 'gridstack-lib' );
+	wp_enqueue_script( 'yak-panels-enhancements' );
+	wp_enqueue_style( 'gridstack-css' );
+} );
+
+/**
+ * Enqueue frontend-only scripts and styles
  */
 add_action( 'wp_enqueue_scripts', function() {
 	if ( has_block( 'yak/panels' ) ) {
-		// Enqueue Gridstack + frontend layout handler
 		wp_enqueue_script( 'gridstack-lib' );
 
 		wp_enqueue_script(
@@ -79,17 +94,14 @@ add_action( 'wp_enqueue_scripts', function() {
 			true
 		);
 
-		// Enqueue frontend CSS (if not automatically handled)
 		wp_enqueue_style( 'yak-panels-style' );
 
-        // Enqueue Gridstack Extra (CSS Grid support)
-        wp_register_style(
-            'gridstack-extra-css',
-            'https://cdn.jsdelivr.net/npm/gridstack@12.2.2/dist/gridstack-extra.min.css',
-            [],
-            '12.2.2'
-        );
-        wp_enqueue_style( 'gridstack-extra-css' );
-
+		wp_register_style(
+			'gridstack-extra-css',
+			'https://cdn.jsdelivr.net/npm/gridstack@12.2.2/dist/gridstack-extra.min.css',
+			[],
+			'12.2.2'
+		);
+		wp_enqueue_style( 'gridstack-extra-css' );
 	}
 } );
