@@ -1,0 +1,49 @@
+
+/* Yak Panels Frontend Styles */
+
+.yak-panels-block {
+	width: 100%;
+	min-height: 300px;
+	position: relative;
+}
+
+.grid-stack {
+	display: block;
+	background-color: var(--yak-color-muted, #f7f7f7);
+	padding: 1rem;
+	gap: 1rem;
+}
+
+/* Grid items */
+.grid-stack-item {
+	transition: all 0.2s ease-in-out;
+}
+
+.grid-stack-item-content {
+	background-color: var(--yak-color-white, #fff);
+	border: 1px solid var(--yak-color-muted, #e0e0e0);
+	border-radius: var(--yak-radius, 6px);
+	padding: 1rem;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+	cursor: default;
+	user-select: text;
+	transition: box-shadow 0.2s ease-in-out, transform 0.1s ease;
+}
+
+/* Optional hover effect */
+.grid-stack-item-content:hover {
+	/* box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+	transform: translateY(-2px); */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+	.grid-stack {
+		padding: 0.5rem;
+	}
+
+	.grid-stack-item-content {
+		padding: 0.75rem;
+	}
+}
+
